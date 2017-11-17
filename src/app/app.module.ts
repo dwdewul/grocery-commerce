@@ -19,6 +19,10 @@ import { MyOrdersComponent } from './my-orders/my-orders.component';
 import { AdminProductsComponent } from './admin/admin-products/admin-products.component';
 import { AdminOrdersComponent } from './admin/admin-orders/admin-orders.component';
 import { LoginComponent } from './login/login.component';
+import { AuthService } from './services/auth.service';
+import { AuthGuardService } from './guards/auth-guard.service';
+import { UserService } from './services/user.service';
+import { AdminGuardService } from './services/admin-guard.service';
 
 
 
@@ -26,12 +30,14 @@ const appRoutes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'products', component: ProductsComponent },
   { path: 'shopping-cart', component: ShoppingCartComponent },
-  { path: 'checkout', component: CheckoutComponent },
-  { path: 'my/orders', component: MyOrdersComponent },
-  { path: 'order-success', component: OrderSuccessComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'admin/products', component: AdminProductsComponent },
-  { path: 'admin/orders', component: AdminOrdersComponent}
+
+  { path: 'checkout', component: CheckoutComponent, canActivate: [AuthGuardService] },
+  { path: 'my/orders', component: MyOrdersComponent, canActivate: [AuthGuardService] },
+  { path: 'order-success', component: OrderSuccessComponent, canActivate: [AuthGuardService] },
+
+  { path: 'admin/products', component: AdminProductsComponent, canActivate: [AuthGuardService, AdminGuardService] },
+  { path: 'admin/orders', component: AdminOrdersComponent, canActivate: [AuthGuardService, AdminGuardService]}
 
 ]
 
@@ -57,7 +63,7 @@ const appRoutes: Routes = [
     NgbModule.forRoot(),
     RouterModule.forRoot(appRoutes),
   ],
-  providers: [],
+  providers: [AuthService, AuthGuardService, UserService, AdminGuardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
