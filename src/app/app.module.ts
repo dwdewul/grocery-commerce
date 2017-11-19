@@ -5,6 +5,7 @@ import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/dat
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { RouterModule, Routes } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule } from '@angular/forms';
 
 
 import { AppComponent } from './app.component';
@@ -23,6 +24,9 @@ import { AuthService } from './services/auth.service';
 import { AuthGuardService } from './guards/auth-guard.service';
 import { UserService } from './services/user.service';
 import { AdminGuardService } from './services/admin-guard.service';
+import { ProductFormComponent } from './admin/product-form/product-form.component';
+import { CategoryService } from './services/category.service';
+import { ProductService } from './services/product.service';
 
 
 
@@ -37,6 +41,7 @@ const appRoutes: Routes = [
   { path: 'order-success', component: OrderSuccessComponent, canActivate: [AuthGuardService] },
 
   { path: 'admin/products', component: AdminProductsComponent, canActivate: [AuthGuardService, AdminGuardService] },
+  { path: 'admin/products/new', component: ProductFormComponent, canActivate: [AuthGuardService, AdminGuardService] },
   { path: 'admin/orders', component: AdminOrdersComponent, canActivate: [AuthGuardService, AdminGuardService]}
 
 ]
@@ -53,17 +58,25 @@ const appRoutes: Routes = [
     MyOrdersComponent,
     AdminProductsComponent,
     AdminOrdersComponent, 
-    LoginComponent
+    LoginComponent, ProductFormComponent
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
     AngularFireAuthModule,
     NgbModule.forRoot(),
     RouterModule.forRoot(appRoutes),
   ],
-  providers: [AuthService, AuthGuardService, UserService, AdminGuardService],
+  providers: [
+    AuthService, 
+    AuthGuardService, 
+    UserService, 
+    AdminGuardService, 
+    CategoryService, 
+    ProductService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
